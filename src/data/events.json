@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "title": "Tech Expo 2025",
+        "description": "Step into the future at this year’s Tech Expo—a dynamic showcase of cutting-edge innovation, emerging technologies, and transformative ideas shaping tomorrow’s world. Bringing together industry leaders, startups, researchers, and technology enthusiasts, the expo offers an immersive experience filled with live demonstrations, keynote presentations, interactive workshops, and hands-on product displays. Join us and witness how technology is redefining industries—and imagine what’s possible when innovation meets imagination.",
+        "location": "GITAM Convention Center",
+        "date": "2025-12-14",
+        "price": 1999.0,
+        "imageUrl": "/images/expo.png",
+        "status": "upcoming"
+    },
+    {
+        "id": 2,
+        "title": "Art & Culture Fest",
+        "description": "Celebrate creativity, heritage, and human expression at the Art & Culture Fest—an inspiring gathering that brings together artists, performers, storytellers, and cultural enthusiasts from diverse backgrounds. This vibrant festival offers a rich tapestry of experiences, featuring art exhibitions, live performances, cultural showcases, interactive workshops, craft markets, and immersive installations. Whether you're an art lover, a culture seeker, or simply curious to explore new perspectives, the Art & Culture Fest invites you to connect, celebrate, and be inspired by the endless expressions of human creativity.",
+        "location": "City Art Gallery",
+        "date": "2025-11-20",
+        "price": 1549.0,
+        "imageUrl": "/images/artandculture.jpg",
+        "status": "live"
+    },
+    {
+        "id": 3,
+        "title": "Music Carnival",
+        "description": "A weekend filled with live music from various genres.",
+        "location": "Open Air Theater",
+        "date": "2025-10-05",
+        "price": 1299.0,
+        "imageUrl": "",
+        "status": "upcoming"
+    }
+]
