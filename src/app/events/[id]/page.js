@@ -2,11 +2,21 @@
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import eventData from "@/data/events.json";
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
+import { firebaseAuth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { addEventTicket, updateUserProfile } from "@/lib/firestore";
+import { useRouter } from "next/navigation";
 
 export default function EventPage({ params }) {
+    const router = useRouter();
     const resolvedParams = use(params);
     const event = eventData.find((event) => event.id === parseInt(resolvedParams.id));
+
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const [formData, setFormData] = useState({
         firstName: "",
@@ -18,6 +28,23 @@ export default function EventPage({ params }) {
         tshirtSize: "M"
     });
 
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(firebaseAuth, (currentUser) => {
+            if (currentUser) {
+                setUser(currentUser);
+                // Pre-fill email from authenticated user
+                setFormData(prev => ({
+                    ...prev,
+                    email: currentUser.email || ""
+                }));
+            } else {
+                setUser(null);
+            }
+        });
+
+        return () => unsubscribe();
+    }, []);
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -25,9 +52,64 @@ export default function EventPage({ params }) {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        alert(`Ticket confirmed for ${formData.firstName} ${formData.lastName}!\nTotal: ₹${event.price}`);
+
+        if (!user) {
+            setError("Please login to book a ticket");
+            setTimeout(() => router.push("/login"), 2000);
+            return;
+        }
+
+        setError("");
+        setSuccess("");
+        setLoading(true);
+
+        try {
+            // Update user profile with booking information
+            await updateUserProfile(user.uid, {
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                age: parseInt(formData.age),
+                gender: formData.gender,
+                phone: formData.phone,
+                tshirtSize: formData.tshirtSize
+            });
+
+            // Add event ticket to user's tickets array
+            const result = await addEventTicket(user.uid, {
+                eventId: event.id,
+                eventTitle: event.title,
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                age: parseInt(formData.age),
+                gender: formData.gender,
+                email: formData.email,
+                phone: formData.phone,
+                tshirtSize: formData.tshirtSize,
+                price: event.price
+            });
+
+            if (result.success) {
+                setSuccess(`Ticket booked successfully! Ticket ID: ${result.ticketId}`);
+                // Reset form
+                setFormData({
+                    firstName: "",
+                    lastName: "",
+                    age: "",
+                    gender: "",
+                    email: user.email || "",
+                    phone: "",
+                    tshirtSize: "M"
+                });
+            } else {
+                setError(result.error || "Failed to book ticket");
+            }
+        } catch (err) {
+            setError(err.message || "An error occurred while booking");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -57,6 +139,21 @@ export default function EventPage({ params }) {
                         {event.status === "live" && (
                             <div className="flex flex-col w-full h-fit">
                                 <h1 className="text-4xl font-bold mb-6">Book Your Ticket</h1>
+                                {!user && (
+                                    <div className="p-4 mb-4 bg-yellow-100 border-2 border-yellow-500 rounded-full text-yellow-700 text-center">
+                                        Please <a href="/login" className="font-bold underline">login</a> to book tickets
+                                    </div>
+                                )}
+                                {error && (
+                                    <div className="p-4 mb-4 bg-red-100 border-2 border-red-500 rounded-full text-red-700 text-center">
+                                        {error}
+                                    </div>
+                                )}
+                                {success && (
+                                    <div className="p-4 mb-4 bg-green-100 border-2 border-green-500 rounded-full text-green-700 text-center">
+                                        {success}
+                                    </div>
+                                )}
                                 <div className="flex gap-6">
                                     <Image
                                         src='/images/book-tickets.jpg'
@@ -177,9 +274,10 @@ export default function EventPage({ params }) {
                                             </div>
                                             <button
                                                 type="submit"
-                                                className="bg-black text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-green-700 transition-colors cursor-pointer"
+                                                disabled={loading || !user}
+                                                className="bg-black text-white px-12 py-4 rounded-full text-xl font-semibold hover:bg-green-700 transition-colors cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
                                             >
-                                                Confirm Booking
+                                                {loading ? "Booking..." : "Confirm Booking"}
                                             </button>
                                         </div>
                                     </form>
