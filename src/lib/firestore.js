@@ -85,6 +85,8 @@ export const addEventTicket = async (userId, ticketData) => {
             ticketId: `TICKET-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             eventId: ticketData.eventId,
             eventTitle: ticketData.eventTitle,
+            eventDate: ticketData.eventDate,
+            eventLocation: ticketData.eventLocation,
             firstName: ticketData.firstName,
             lastName: ticketData.lastName,
             age: ticketData.age,
@@ -93,8 +95,8 @@ export const addEventTicket = async (userId, ticketData) => {
             phone: ticketData.phone,
             tshirtSize: ticketData.tshirtSize,
             price: ticketData.price,
-            paymentStatus: "pending", // pending, completed, failed
-            bookingDate: serverTimestamp()
+            paymentStatus: "completed", // Set to completed immediately
+            bookingDate: new Date().toISOString()
         };
 
         await updateDoc(userRef, {
@@ -102,7 +104,7 @@ export const addEventTicket = async (userId, ticketData) => {
             updatedAt: serverTimestamp()
         });
 
-        return { success: true, ticketId: ticket.ticketId };
+        return { success: true, ticketId: ticket.ticketId, ticket };
     } catch (error) {
         console.error("Error adding event ticket:", error);
         return { success: false, error: error.message };
