@@ -234,14 +234,14 @@ export default function EventPage({ params }) {
                                             <p className="text-xl text-white">Your ticket has been confirmed</p>
                                         </div>
 
-                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 mb-6">
-                                            <p className="text-white text-lg mb-2"><strong>Ticket ID:</strong></p>
-                                            <p className="text-2xl font-mono font-bold text-green-400 break-all">{ticketId}</p>
+                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 mb-6">
+                                            <p className="text-black text-lg mb-1"><strong>Ticket ID:</strong></p>
+                                            <p className="text-xl font-mono font-bold text-green-400 break-all">{ticketId}</p>
                                         </div>
 
-                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6 mb-6">
-                                            <h3 className="text-xl font-bold text-white mb-4">Important Information</h3>
-                                            <ul className="text-white space-y-2">
+                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4 mb-6">
+                                            <h3 className="text-xl font-bold text-black mb-2">Important Information</h3>
+                                            <ul className="text-black space-y-2">
                                                 <li>✓ Payment Status: <strong className="text-green-400">CONFIRMED</strong></li>
                                                 <li>✓ Please save your Ticket ID for future reference</li>
                                                 <li>✓ Present this ticket at the event entrance</li>
@@ -249,12 +249,12 @@ export default function EventPage({ params }) {
                                             </ul>
                                         </div>
 
-                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-6">
-                                            <h3 className="text-xl font-bold text-white mb-3">Need Help?</h3>
-                                            <p className="text-white mb-2">For any queries or issues, please contact us:</p>
-                                            <div className="space-y-2 text-white">
+                                        <div className="bg-white bg-opacity-20 backdrop-blur-sm rounded-xl p-4">
+                                            <h3 className="text-xl font-bold text-black mb-2">Need Help?</h3>
+                                            <p className="text-black mb-2">For any queries or issues, please contact us:</p>
+                                            <div className="space-y-2 text-black">
                                                 <p>📧 Email: <a href="mailto:support@aanya.io" className="text-green-400 hover:underline font-semibold">support@aanya.io</a></p>
-                                                <p>📞 Phone: <a href="tel:+919876543210" className="text-green-400 hover:underline font-semibold">+91 98765 43210</a></p>
+                                                <p>📞 Phone: <a href="tel:+919876543210" className="text-green-400 hover:underline font-semibold">+91 88888 88888</a></p>
                                             </div>
                                         </div>
 
